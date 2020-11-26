@@ -1,0 +1,157 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+{% block body %}
+    {% if request.user_obj.is_staff %}
+        <div class="text-center mb-4">
+            <button class="btn btn-lg btn-primary" data-action="add-resource"><i class="far fa-plus"></i> Add Resource</button>
+        </div>
+    {% endif %}
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-lg-6 col-xl-4 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-secondary">
+                        <a class="float-right mt-3" data-toggle="collapse" href="#collapse-{{ category.0 }}"><i class="far fa-lg fa-plus"></i></a>
+                        <h5 class="mb-0">{{ category.0 }}</h5>
+                        <p class="mb-0">{{ resources|get_value_from_dict:category.0|length }} Resource{{ resources|get_value_from_dict:category.0|length|pluralize }}</p>
+                    </div>
+                    <div class="collapse" id="collapse-{{ category.0 }}">
+                        <div class="card-body">
+                            <table class="table table-hover" style="width: 100%">
+                                <thead>
+                                    {% if request.user_obj.is_staff %}
+                                        <th style="width: 7%"></th>
+                                    {% endif %}
+                                    <th style="width: 23%">Updated</th>
+                                    <th style="width: 70%">File</th>
+                                </thead>
+                                <tbody>
+                                    {% for resource in resources|get_value_from_dict:category.0 %}
+                                        <tr style="height: 20px">
+                                            {% if request.user_obj.is_staff %}
+                                                <td><a class="link-secondary" data-action="edit-resource" data-id="{{ resource.id }}" data-name="{{ resource.name }}" data-category="{{ resource.category }}" data-description="{{ resource.description }}"><i class="fas fa-pencil-ruler"></i></a></td>
+                                            {% endif %}
+                                            <td>{{ resource.updated|date:'Y-m-d' }}</td>
+                                            <td><a href="{{ resource.path.url }}" target="_blank">{{ resource.name }}</a></td>
+                                        </tr>
+                                    {% empty %}
+                                        <td class="text-center" colspan="3">No resources found!</td>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% if request.user_obj.is_staff %}
+        <script>
+            $(function() {
+                $('[data-action="edit-resource"]').click(function() {
+                    const $this = $(this)
+                    launchCustomModal(
+                        'info',
+                        'Editing Resource',
+                        `<form action="${'{% url 'edit_resource' resource_id=0 %}'.replace(/0/, $this.data('id'))}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <input name="name" type="text" value="` + $this.data('name') + `" required>
+                                        <label>Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <div class="select-group">
+                                            <select name="category" type="text" required>
+                                                {% for category in categories %}
+                                                    <option>{{ category|first }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Category</label>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="col-8 label-group mx-auto">
+                                        <div class="file-upload">
+                                            <input name="file" type="file">
+                                            <label>File Upload</label>
+                                            <span class="file-name"></span>
+                                            <div class="upload-btn">Upload</div>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                        <div class="input-hint">Only select if you want to change the file</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary">Save Changes</button>
+                        </form>
+                        <hr>
+                        <button class="btn btn-danger" onClick="deleteResource(` + $this.data('id') + `)"><i class="far fa-trash-alt"></i> Delete</button>`
+                    )
+                    $('#customModal select[name="category"]').val($this.data('category'))
+                })
+                $('[data-action="add-resource"]').click(function() {
+                    launchCustomModal(
+                        'info',
+                        'Adding Resource',
+                        `<form action="{% url 'new_resource' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <input name="name" type="text" required>
+                                        <label>Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <div class="select-group">
+                                            <select name="category" type="text" required>
+                                                {% for category in categories %}
+                                                    <option>{{ category|first }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Category</label>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="col-8 label-group mx-auto">
+                                        <div class="file-upload">
+                                            <input name="file" type="file" required>
+                                            <label>File Upload</label>
+                                            <span class="file-name"></span>
+                                            <div class="upload-btn">Upload</div>
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary" type="submit">Save Resource</button>
+                        </form>`
+                    )
+                })
+            })
+
+            function deleteResource(id) {
+                $.post('{% url 'delete_resource' resource_id=0 %}'.replace(/0/, id))
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+            }
+        </script>
+    {% endif %}
+{% endblock %}

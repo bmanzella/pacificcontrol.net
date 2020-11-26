@@ -1,0 +1,9 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    {{ message|safe }}
+{% endblock %}
+
+{% block footer %}
+    This message was sent by {{ sender.full_name }} on {% now 'M d, Y \a\t Hi\z' %}.
+{% endblock %}

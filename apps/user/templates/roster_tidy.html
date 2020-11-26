@@ -1,0 +1,92 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+{% block body %}
+    <div class="alert alert-info mb-4">
+        <h4 class="alert-heading">Restricted Access</h4>
+        <p class="mb-0">This action is restricted to the ATM, DATM, and members of VATUSA staff. The VATUSA API will simply deny any requests coming from users not belonging to one of those categories.</p>
+    </div>
+    <div class="alert alert-warning mb-4">
+        <h4 class="alert-heading">Warning</h4>
+        <p class="mb-0">Removal of controllers is irreversible and all selected controllers will be automatically removed from the PCF active roster. Please verify your actions before submitting!</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-5">
+                    <form id="tidyForm" method="POST">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="border-0 text-center align-middle"><input class="mb-0" type="checkbox" id="select-all"></th>
+                                    <th class="border-0 pl-0">Name</th>
+                                    <th class="border-0 text-center">CID</th>
+                                    <th class="border-0 text-center">Rating</th>
+                                    {% for month in months %}
+                                        <th class="border-0">{{ month }} Hours</th>
+                                    {% endfor %}
+                                    <th class="border-0">Training Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    {% if not user.user_obj.is_staff and not user.user_obj.activity_exempt and not user.user_obj.status == 1 and not user.user_obj.loa_last_month %}
+                                        <tr>
+                                            <td style="width: 4%" class="text-center align-middle"><input class="mb-0" type="checkbox" name="{{ user.user_obj.id }}"></td>
+                                            <td class="pl-0">{{ user.user_obj.full_name }} {% if user.user_obj.main_role == 'VC' %}<span class="badge badge-sm badge-info">Visitor from {{ user.user_obj.home_facility }}</span>{% endif %}</td>
+                                            <td class="text-center">{{ user.user_obj.cid }}</td>
+                                            <td class="text-center">{{ user.user_obj.rating }}</td>
+                                            <td class="border-left">{{ user.hours.previous1|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td>{{ user.hours.previous|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td class="border-right">{{ user.hours.current|duration|default:'<span class="text-muted">N/A</span>'|safe }}</td>
+                                            <td><span class="text-muted">N/A</span></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <a href="{% url 'roster' %}"><button class="btn btn-secondary mb-0" type="button">Cancel</button></a>
+                        <button class="btn btn-primary mb-0" type="submit">Remove Selected Users</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $(function() {
+            $('#select-all').click(function() {
+                $('tbody input[type="checkbox"]').each(function() {
+                    $(this).prop('checked', $('#select-all').prop('checked'))
+                })
+            })
+            $('tbody input[type="checkbox"]').click(function() {
+                $('#select-all').prop('checked', $('tbody input[type="checkbox"]:checked').length === $('tbody input[type="checkbox"]').length)
+            })
+            $('#tidyForm').submit(function(e) {
+                e.preventDefault()
+                launchCustomModal(
+                    'info',
+                    'Are you sure?',
+                    `<p>Are you sure would like to do this? This action is irreversible and will automatically remove all selected controllers from the Pacific Control Facility active roster.<br><b>This is your final chance to abort!</b></p>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="button" onclick="postRemovals()">Confirm</button>`
+                )
+            })
+        })
+
+        function postRemovals() {
+            $.post({
+                url: '{% url 'remove_user' %}',
+                data: new FormData(document.getElementById('tidyForm')),
+                processData: false,
+                contentType: false,
+            })
+            .done(function() { launchSuccessModal() })
+            .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+        }
+    </script>
+{% endblock %}

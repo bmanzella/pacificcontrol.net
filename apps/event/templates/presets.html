@@ -1,0 +1,122 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+    <div class="text-center">
+        <button class="btn btn-lg btn-primary mb-4" id="add-preset"><i class="far fa-plus"></i> Add Preset</button>
+    </div>
+    <div class="accordion">
+        <div class="row">
+            {% for preset in position_presets %}
+                <div class="col-12 col-md-6 mx-md-auto">
+                    <div class="card" data-id="{{ preset.id }}">
+                        <div class="card-header bg-secondary">
+                            <div class="float-right">
+                                <a class="text-danger" data-action="delete-preset" data-id="{{ preset.id }}"><i class="far fa-trash-alt"></i> Delete</a>
+                            </div>
+                            <h5 class="mb-0"><a data-toggle="collapse" href="#collapse-{{ preset.id }}"><i class="far fa-plus"></i> &nbsp;{{ preset.name }}</a></h5>
+                        </div>
+                        <div class="collapse" id="collapse-{{ preset.id }}">
+                            <div class="card-body">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width: 8%">
+                                        <col style="width: 92%">
+                                    </colgroup>
+                                    <tbody data-id="{{ preset.id }}">
+                                        {% for position in preset.positions %}
+                                            <tr>
+                                                <td class="text-center">
+                                                    <a data-action="edit-position"><i class="far fa-pencil-ruler"></i></a>&nbsp;
+                                                    <a data-action="delete-position"><i class="far fa-trash-alt"></i></a>
+                                                </td>
+                                                <td data-type="name">{{ position }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button class="float-right btn btn-primary" data-action="save" data-id="{{ preset.id }}">Save Changes</button>
+                                <input class="form-control d-inline mr-3 position-input" style="width: 20%">
+                                <button class="btn btn-secondary" data-action="add-position" data-id="{{ preset.id }}"><i class="far fa-plus"></i> Add Position</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="d-none" id="template">
+        <table>
+            <tr>
+                <td class="text-center">
+                    <a data-action="edit-position"><i class="far fa-pencil-ruler"></i></a>&nbsp;
+                    <a data-action="delete-position"><i class="far fa-trash-alt"></i></a>
+                </td>
+                <td data-type="name"></td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('[data-action="add-position"]').click(function() {
+            let id = $(this).data('id')
+            let $input = $(this).parent().find('.position-input')
+            if ($input.val()) {
+                $('#template tr').clone(true).appendTo($('tbody[data-id="' + id + '"]'))
+                    .find('[data-type="name"]').text($input.val())
+                $input.val('')
+            }
+        })
+        $('[data-action="edit-position"]').click(function() {
+            $(this).closest('tr').find('[data-type="name"]').attr('contenteditable','true').focus()
+        })
+        $('[data-action="delete-position"]').click(function() {
+            $(this).closest('tr').remove()
+        })
+        $('[data-action="save"]').click(function() {
+            let id = $(this).data('id')
+            let positions = []
+            $('tbody[data-id="' + id + '"] tr').each(function() {
+                positions.push($(this).find('[data-type="name"]').text())
+            })
+            $.post('{% url 'edit_preset' preset_id=0 %}'.replace(/0/, id), {positions: JSON.stringify(positions)})
+            .done(function() { launchSuccessModal() })
+            .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+        })
+        $('#add-preset').click(function() {
+            launchCustomModal(
+                'info',
+                'Adding Position Preset',
+                `<form id="newPreset" action="{% url 'new_preset' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="col-12">
+                        <div class="label-group">
+                            <input name="name" type="text" required>
+                            <label>Preset Name</label>
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary">Submit</button>
+                </form>`
+            )
+        })
+
+        $('[data-action="delete-preset"]').click(function() {
+            let $this = $(this)
+            launchCustomModal(
+                'info',
+                'Delete Position Preset',
+                `<p>Are you sure you would like to delete this event position preset? This action cannot be undone!</p>
+                <button class="btn btn-secondary" data-dismiss="modal">Go Back!</button>
+                <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+            )
+            $('#customModal button[data-action="confirm"]').click(function() {
+                $.post('{% url 'delete_preset' preset_id=0 %}'.replace(/0/, $this.data('id')))
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+            })
+        })
+    </script>
+{% endblock %}

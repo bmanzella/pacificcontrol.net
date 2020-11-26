@@ -1,0 +1,13 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Request Details:</p>
+    <ul>
+        <li><b>Student:</b> {{ request.student.first_name }} {{ request.student.last_name }}</li>
+        <li><b>Availability:</b> {{ request.start|date:'M j, Y @ Hi\z' }} - {{ request.end|date:'M j, Y @ Hi\z' }}</li>
+        <li><b>Level:</b> {{ request.get_level_display }}</li>
+        <li><b>Type:</b> {{ request.get_type_display }}</li>
+        <li><b>Remarks:</b> {{ request.remarks }}</li>
+    </ul>
+    <p>To view all requests, click <a href="https://pacificcontrol.net/training/requests/">here.</a></p>
+{% endblock %}

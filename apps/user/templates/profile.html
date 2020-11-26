@@ -1,0 +1,282 @@
+{% extends 'secondaryTemplate.html' %}
+{% load static %}
+{% load filters %}
+
+{% block header %}
+    <div class="d-lg-flex text-center text-lg-left align-items-center">
+      <div class="col-3 text-center my-auto">
+          <img class="avatar" src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'img/placeholder-profile.png' %}{% endif %}">
+          {% if user == request.user_obj %}
+              <input type="file" class="upload-avatar">
+              <input type="hidden" name="profile_picture">
+              <div class="change-avatar">Change Avatar</div>
+          {% endif %}
+      </div>
+        <div class="ml-lg-4">
+            <h1 style="font-size: 65px">{{ user.full_name }}</h1>
+            <h2 style="font-size: 40px">
+                {% if user.main_role == 'HC' %}
+                    Home Controller
+                {% elif user.main_role == 'MC' %}
+                    MVAP Controller from {{ user.home_facility }}
+                {% else %}
+                    Visiting Controller from {{ user.home_facility }}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {% if request.user_obj.is_staff %}
+        {% if user.staff_comment %}
+            <div class="alert alert-primary">
+                <a href="#" class="alert-link" data-action="remove-comment"><div class="float-right">Remove <i class="far fa-times"></i></div></a>
+                <h4 class="alert-heading">Staff Comment</h4>
+                <p class="mb-0">{{ user.staff_comment }}</p>
+                <div class="blockquote-footer">{{ user.staff_comment_author.full_name }}</div>
+            </div>
+        {% endif %}
+        <div class="text-center text-lg-left mb-4">
+            <a href="{% url 'edit_user' cid=user.cid %}"><button class="btn btn-secondary">Edit User</button></a><button class="btn btn-secondary" onclick="addComment()">Add Staff Comment</button>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-12 col-lg-6 col-xl-4">
+            <div class="card">
+                <div class="card-header">User Details</div>
+                <div class="card-body px-5 d-block d-lg-flex justify-content-between">
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">CID</h2>
+                        <h1 style="font-size: 35px">{{ user.cid }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">Initials</h2>
+                        <h1 style="font-size: 35px">{{ user.oper_init }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">Rating</h2>
+                        <h1 style="font-size: 35px">{{ user.rating }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 col-xl-4">
+            <div class="card">
+                <div class="card-header">
+                  Biography
+                  {% if user == request.user_obj %}
+                      <a class="float-right" onclick="editBio()">
+                          <i class="fas fa-pencil-ruler"></i>
+                      </a>
+                  {% endif %}
+                </div>
+                <div class="card-body">
+                    {{ user.biography|default:'No biography set' }}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4">
+            <div class="card">
+                <div class="card-header">Endorsements</div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">DEL</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">GND</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">TWR</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">APP</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">CTR</td>
+                            <td style="width: 16.7%; font-size: 14px" class="text-center">OCN</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 16.7%" class="text-center">
+                              {% if user.del_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                              {% elif user.del_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                              {% elif user.del_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                              {% elif user.del_cert == 4 %}<i class="fas fa-circle text-info"></i>
+                              {% elif user.del_cert == 5 %}<i class="fas fa-circle text-dark"></i>                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                              {% if user.gnd_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                              {% elif user.gnd_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                              {% elif user.gnd_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                              {% elif user.gnd_cert == 4 %}<i class="fas fa-circle text-info"></i>
+                              {% elif user.gnd_cert == 5 %}<i class="fas fa-circle text-dark"></i>                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                              {% if user.twr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                              {% elif user.twr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                              {% elif user.twr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                              {% elif user.twr_cert == 4 %}<i class="fas fa-circle text-info"></i>
+                              {% elif user.twr_cert == 5 %}<i class="fas fa-circle text-dark"></i>                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                              {% if user.app_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                              {% elif user.app_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                              {% elif user.app_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                              {% elif user.app_cert == 4 %}<i class="fas fa-circle text-info"></i>
+                              {% elif user.app_cert == 5 %}<i class="fas fa-circle text-dark"></i>                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                              {% if user.ctr_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                              {% elif user.ctr_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                              {% elif user.ctr_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                              {% elif user.ctr_cert == 4 %}<i class="fas fa-circle text-info"></i>
+                              {% elif user.ctr_cert == 5 %}<i class="fas fa-circle text-dark"></i>                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                            <td style="width: 16.7%" class="text-center">
+                                {% if user.ocn_cert == 3 %}<i class="fas fa-circle text-danger"></i>
+                                {% elif user.ocn_cert == 2 %}<i class="fas fa-circle text-success"></i>
+                                {% elif user.ocn_cert == 1 %}<i class="fas fa-circle text-warning"></i>
+                                {% else %}<i class="fas fa-circle text-secondary"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-xl-6">
+            <div class="card">
+                <div class="card-header">Statistics</div>
+                <div class="card-body px-5 d-block d-lg-flex justify-content-between">
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">{% now 'F' %} Hours</h2>
+                        <h1 style="font-size: 35px">{{ stats.month|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">{% now 'Y' %} Hours</h2>
+                        <h1 style="font-size: 35px">{{ stats.year|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
+                    </div>
+                    <div class="text-center">
+                        <h2 style="font-size: 25px">Total Hours</h2>
+                        <h1 style="font-size: 35px">{{ stats.total|duration|default:'<span class="text-muted">N/A</span>'|safe }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-6">
+            <div class="card">
+                <div class="card-header">Controller Connections</div>
+                <div class="card-body text-center pt-1">
+                    <table class="table table-striped" id="connections">
+                        <thead>
+                            <tr>
+                                <th class="border-0" style="width: 33.3%">Date / Time</th>
+                                <th class="border-0" style="width: 33.3%">Callsign</th>
+                                <th class="border-0" style="width: 33.3%">Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for connection in connections %}
+                                <tr>
+                                    <td style="width: 33.3%"><span class="d-none">{{ connection.start|date:'Ymd Hi' }}</span>{{ connection.start|date:'M j, Y @ Hi\z' }}</td>
+                                    <td style="width: 33.3%">{{ connection.callsign }}</td>
+                                    <td style="width: 33.3%">{{ connection.duration|duration }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3"><i>No connections found...</i></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js" integrity="sha512-N4T9zTrqZUWCEhVU2uD0m47ADCWYRfEGNQ+dx/lYdQvOn+5FJZxcyHOY68QKsjTEC7Oa234qhXFhjPGQu6vhqg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.min.js" integrity="sha512-V8cSoC5qfk40d43a+VhrTEPf8G9dfWlEJgvLSiq2T2BmgGRmZzB8dGe7XAABQrWj3sEfrR5xjYICTY4eJr76QQ==" crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $('#connections').DataTable({
+                pageLength: 5,
+                lengthChange: false,
+                order: [[ 0, "desc" ]]
+            })
+        })
+        {% if request.user_obj.is_staff %}
+            function addComment() {
+                launchCustomModal(
+                    'info',
+                    'Adding Staff Comment',
+                    `<form action="{% url 'add_comment' cid=user.cid %}" method="POST">
+                        {% csrf_token %}
+                        <div class="label-group">
+                            <textarea name="comment" rows="2" required></textarea>
+                            <span class="focus-border"></span>
+                        </div>
+                        <button class="btn btn-primary">Submit</button>
+                    </form>`
+                )
+            }
+            $('[data-action="remove-comment"]').click(function() {
+                $.post('{% url 'remove_comment' cid=user.cid %}')
+                .done(function() { launchSuccessModal() })
+                .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+            })
+        {% endif %}
+          {% if user == request.user_obj %}
+      function editBio() {
+          launchCustomModal(
+              'info',
+              'Editing Biography',
+              `<form action="{% url 'edit_bio' cid=user.cid %}" method="POST">
+                  {% csrf_token %}
+                  <div class="label-group">
+                      <textarea name="biography" rows="2">{{ user.biography }}</textarea>
+                      <span class="focus-border"></span>
+                  </div>
+                  <button class="btn btn-primary">Submit</button>
+              </form>`
+            )
+      }
+      var cropper = null
+      $('.upload-avatar').change(function(e) {
+          $('.change-avatar').text('Change Avatar')
+          let files = e.target.files
+          if (FileReader && files && files.length) {
+              let reader = new FileReader()
+              reader.onload = function () {
+                  launchCustomModal(
+                      'info',
+                      'Crop your avatar!',
+                      `<div class="col-sm-12 my-4"><img class="image-crop" src=""></div>
+                      <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button class="btn btn-primary" onclick="cropImage()">Submit</button>`
+                    )
+                  $('.image-crop').attr('src', reader.result)
+                  cropper = $('.image-crop').cropper({
+                      aspectRatio: 1,
+                      viewMode: 2,
+                      zoomable: false,
+                      movable: false,
+                      autoCropArea: 1,
+                  })
+              }
+              reader.readAsDataURL(files[0])
+          }
+      })
+      function cropImage() {
+          let imageData = cropper.data('cropper').getCroppedCanvas().toDataURL()
+          $('.avatar').attr('src', imageData)
+          $.post('{% url 'edit_avatar' cid=user.cid %}', {profile_picture: imageData})
+          .always(function() { $('#customModal').modal('hide') })
+          .done(function() { launchSuccessModal() })
+          .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+      }
+    {% endif %}
+
+    </script>
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends 'secondaryTemplate.html' %}
+{% load filters %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block header %}
+    <h2 style="font-size: 40px">You are now editing</h2>
+    <h1 style="font-size: 65px">{{ event.name }}</h1>
+{% endblock %}
+
+{% block body %}
+    <form action="{% url 'edit_event' event_id=event.id %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Event Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <input name="name" type="text" value="{{ event.name }}" required>
+                                    <label>Event Name</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="start" type="datetime-local" value="{{ event.start|to_iso_format }}" required>
+                                    <label>Start Time (Zulu)</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="end" type="datetime-local" value="{{ event.end|to_iso_format }}" required>
+                                    <label>End Time (Zulu)</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="banner" type="text" value="{{ event.banner }}">
+                                    <label>Banner URL</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="host" type="text" value="{{ event.host }}" required>
+                                    <label>Event Host</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="text-left col-12 mb-3 toggle">
+                                <input name="hidden" type="checkbox" {% if event.hidden %}checked{% endif %}>
+                                <label>Event hidden from controllers</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Event Description</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <textarea name="description" rows="9">{{ event.description }}</textarea>
+                                    <label>Event Description</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger float-right m-0" type="button" data-action="delete-event"><i class="far fa-trash-alt"></i> Delete Event</button>
+        <a href="{% url 'event' event_id=event.id %}"><button class="btn btn-secondary" type="button">Return to Event</button></a>
+        <button class="btn btn-primary">Save Changes</button>
+    </form>
+    <hr>
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="mb-0">Center Assignments</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for position in positions.center %}
+                            <li class="py-2">
+                                <div class="float-right">
+                                    <a class="text-info" data-action="unassign" data-id="{{ position.id }}"><b><i class="far fa-user-times"></i> Unassign</b></a> &nbsp;
+                                    <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
+                                </div>
+                                <b>{{ position.name }}</b>
+                                <select class="selectpicker show-tick" title="Select Controller ({{ position.requests.all|length }} Request{{ position.requests.all|length|pluralize }})" data-width="100%">
+                                    {% if position.user %}
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
+                                            {% if position.user.event_score >= 90 %}badge-success
+                                            {% elif position.user.event_score >= 65 %}badge-warning
+                                            {% elif position.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ position.user.event_score }}%</span></span>" selected>{{ position.user.full_name }}</option>
+                                    {% endif %}
+                                    {% for request in position.requests.all %}
+                                        {% if position.user != request.user %}
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm
+                                            {% if request.user.event_score >= 90 %}badge-success
+                                            {% elif request.user.event_score >= 65 %}badge-warning
+                                            {% elif request.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ request.user.event_score }}%</span></span>">{{ request.user.full_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% empty %}
+                            <li class="py-2"><i>No positions posted...</i></li>
+                        {% endfor %}
+                    </ul>
+                    <input class="form-control d-inline mr-3 position-input" style="width: 30%">
+                    <button class="btn btn-primary" data-action="add-position"><i class="far fa-plus"></i> Add Position</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="mb-0">TRACON Assignments</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for position in positions.tracon %}
+                            <li class="py-2">
+                                <div class="float-right">
+                                    <a class="text-info" data-action="unassign" data-id="{{ position.id }}"><b><i class="far fa-user-times"></i> Unassign</b></a> &nbsp;
+                                    <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
+                                </div>
+                                <b>{{ position.name }}</b>
+                                <select class="selectpicker show-tick" title="Select Controller ({{ position.requests.all|length }} Request{{ position.requests.all|length|pluralize }})" data-width="100%">
+                                    {% if position.user %}
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
+                                            {% if position.user.event_score >= 90 %}badge-success
+                                            {% elif position.user.event_score >= 65 %}badge-warning
+                                            {% elif position.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ position.user.event_score }}%</span></span>" selected>{{ position.user.full_name }}</option>
+                                    {% endif %}
+                                    {% for request in position.requests.all %}
+                                        {% if position.user != request.user %}
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm
+                                            {% if request.user.event_score >= 90 %}badge-success
+                                            {% elif request.user.event_score >= 65 %}badge-warning
+                                            {% elif request.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ request.user.event_score }}%</span></span>">{{ request.user.full_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% empty %}
+                            <li class="py-2"><i>No positions posted...</i></li>
+                        {% endfor %}
+                    </ul>
+                    <input class="form-control d-inline mr-3 position-input" style="width: 30%">
+                    <button class="btn btn-primary" data-action="add-position"><i class="far fa-plus"></i> Add Position</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="mb-0">Cab Assignments</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for position in positions.cab %}
+                            <li class="py-2">
+                                <div class="float-right">
+                                    <a class="text-info" data-action="unassign" data-id="{{ position.id }}"><b><i class="far fa-user-times"></i> Unassign</b></a> &nbsp;
+                                    <a class="text-danger" data-action="delete" data-id="{{ position.id }}"><b><i class="far fa-times"></i> Delete</b></a>
+                                </div>
+                                <b>{{ position.name }}</b>
+                                <select data-action="assign" class="selectpicker show-tick" title="Select Controller ({{ position.requests.all|length }} Request{{ position.requests.all|length|pluralize }})" data-width="100%">
+                                    {% if position.user %}
+                                        <option data-content="<span class='text-dark'>{{ position.user.full_name }} <span class='badge badge-sm
+                                            {% if position.user.event_score >= 90 %}badge-success
+                                            {% elif position.user.event_score >= 65 %}badge-warning
+                                            {% elif position.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ position.user.event_score }}%</span></span>" selected>{{ position.user.full_name }}</option>
+                                    {% endif %}
+                                    {% for request in position.requests.all %}
+                                        {% if position.user != request.user %}
+                                            <option value="{{ request.id }}" data-content="<span class='text-dark'>{{ request.user.full_name }} <span class='badge badge-sm
+                                            {% if request.user.event_score >= 90 %}badge-success
+                                            {% elif request.user.event_score >= 65 %}badge-warning
+                                            {% elif request.user.event_score < 65 %}badge-danger
+                                            {% endif %}'>{{ request.user.event_score }}%</span></span>">{{ request.user.full_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                        {% empty %}
+                            <li class="py-2"><i>No positions posted...</i></li>
+                        {% endfor %}
+                    </ul>
+                    <input class="form-control d-inline mr-3 position-input" style="width: 30%">
+                    <button class="btn btn-primary" data-action="add-position"><i class="far fa-plus"></i> Add Position</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script>
+      let previous
+      $('[data-action="delete-event"]').click(function() {
+          launchCustomModal(
+              'info',
+              `Delete Event "{{ event.name }}"?`,
+              `<p>Are you sure you would like to delete this event? This action cannot be undone!</p>
+              <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+          )
+          $('#customModal [data-action="confirm"]').click(function() {
+              $.post('{% url 'delete_event' event_id=event.id %}')
+              .done(function() { location.href = '{% url 'events' %}'})
+              .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+          })
+      })
+      $('[data-action="unassign"]').click(function() {
+          $.post('{% url 'unassign_position' position_id=0 %}'.replace(/0/, $(this).data('id')))
+          .done(function() { location.reload() })
+          .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+      })
+      $('[data-action="delete"]').click(function() {
+          $.post('{% url 'delete_position' position_id=0 %}'.replace(/0/, $(this).data('id')))
+          .done(function() { location.reload() })
+          .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+      })
+      $('.position-input').keyup(function(event) {
+          let pos = $(this).val()
+          if (event.key === 'Enter' || event.keyCode === 13) {
+              addPosition(pos)
+          }
+      })
+      $('[data-action="add-position"]').click(function() {
+          addPosition($(this).parent().find('.position-input').val())
+      })
+      $('select').on('shown.bs.select',function() {
+          previous = $(this).val()
+      }).change(function() {
+          if ($(this).val() !== "0") {
+              $.post('{% url 'assign_position' request_id=0 %}'.replace(/0/, $(this).val()))
+                  .done(function() { location.reload() })
+                  .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+          } else {
+              $(this).selectpicker('val', previous);
+              launchCustomModal(
+                  'info',
+                  `Manually assigning user to ${$(this).data('name')}`,
+                  `<select name="controller" class="selectpicker" title="Select Controller" data-width="80%" data-live-search="true" data-size="8" data-dropup-auto="false">
+                      {% for controller in controllers %}
+                          <option value="{{ controller.cid }}" data-tokens="{{ controller.cid }}" data-content="<span class='text-dark'>{{ controller.full_name }} <span class='badge badge-sm
+                          {% if controller.event_score >= 90 %}badge-success
+                          {% elif controller.event_score >= 65 %}badge-warning
+                          {% elif controller.event_score < 65 %}badge-danger
+                          {% endif %}'>{{ controller.event_score }}%</span></span>">{{ controller.full_name }}</option>
+                      {% endfor %}
+                  </select>
+                  <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button class="btn btn-primary" data-action="confirm">Confirm</button>`
+              )
+              $('select[name="controller"]').selectpicker('render')
+              let $this = $(this)
+              $('#customModal [data-action="confirm"]').click(function() {
+                  $.post('{% url 'manual_assign_position' position_id=0 cid=800000 %}'.replace(/0/, $this.data('position')).replace(/800000/, $('select[name="controller"]').val()))
+                  .done(function() { location.href = '{% url 'edit_event' event_id=event.id %}'})
+                  .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+              })
+          }
+      })
+      function addPosition(pos) {
+          $.post('{% url 'add_position' event_id=event.id %}', {position: pos})
+          .done(function() { location.reload() })
+          .fail(function(error) { launchErrorModal('Error ' + error.status + ': ' + error.responseText) })
+      }
+    </script>
+{% endblock %}

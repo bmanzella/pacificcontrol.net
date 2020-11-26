@@ -1,0 +1,218 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.css">
+{% endblock %}
+
+
+{% block body %}
+    <div class="alert alert-info mb-4">
+        <h4 class="alert-heading">How do I use this?</h4>
+        <p class="mb-0">To request training, indicate the range of time for which you are <b>100% available</b>. When your request is submitted, a mentor or instructor will be able to accept the request and set any time within that range that works for them. To select a time, drag your mouse across multiple boxes on the calendar below.</p>
+    </div>
+    <div id="calendar-menu" class="text-center">
+        <button class="btn" data-action="prev" style="font-size: 20px">
+            <i class="fas fa-angle-left"></i>
+        </button>
+        <button class="btn" data-action="today" style="font-size: 20px">Today</button>
+        <button class="btn" data-action="next" style="font-size: 20px">
+            <i class="fas fa-angle-right"></i>
+        </button>
+    </div>
+    <p class="text-center" id="calendar-range"></p>
+
+    <div id="calendar" style="height: 800px"></div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+    <script>
+        let cal = null
+        let dateOptions = {year: 'numeric', month: 'long', day: '2-digit'}
+        function setRange() {
+            $('#calendar-range').html('<b>' +
+                new Date(cal.getDateRangeStart().getTime()).toLocaleDateString("en-US", dateOptions) + ' - ' +
+                new Date(cal.getDateRangeEnd().getTime()).toLocaleDateString("en-US", dateOptions) + '</b>'
+            )
+        }
+        $(function() {
+            cal = new tui.Calendar(document.getElementById('calendar'), {
+                defaultView: 'week',
+                taskView: false,
+                useDetailPopup: true,
+                template: {
+                    popupDetailDate: function(isAllDay, start, end) {
+                        let tz = moment.tz.guess()
+                        start = moment(start.toDate()).tz(tz).utc()
+                        end = moment(end.toDate()).tz(tz).utc()
+                        let isSameDate = start.date() === end.date()
+                        if (isAllDay) {
+                            return moment(start).format('MMM DD, YYYY') + (isSameDate ? '' : ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format('MMM DD, YYYY'))
+                        } else {
+                            return moment(start).format('MMM DD, YYYY @ HHmm[z]') + ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format((isSameDate ? '' : 'MMM DD, YYYY @ ') + 'HHmm[z]')
+                        }
+                    },
+                },
+                theme: {
+                  'week.today.backgroundColor': 'rgba(221, 132, 37, 0.05)',
+                  'week.currentTime.color': '#dd8425',
+                  'week.currentTimeLinePast.border': '1px dashed #dd8425',
+                  'week.currentTimeLineBullet.backgroundColor': '#dd8425',
+                  'week.currentTimeLineToday.border': '1px solid #dd8425',
+                  'week.creationGuide.color': '#dd8425',
+                  'common.creationGuide.backgroundColor': 'rgba(221, 132, 37, 0.05)',
+                  'common.creationGuide.border': '1px solid #dd8425',
+                },
+                timezones: [
+                    {
+                        timezoneOffset: -new Date().getTimezoneOffset(),
+                        displayLabel: 'Local',
+                        tooltip: 'Local'
+                    }, {
+                        timezoneOffset: 0,
+                        displayLabel: 'UTC',
+                        tooltip: 'UTC'
+                    }
+                ],
+                calendars: [
+                    {
+                        id: '1',
+                        name: 'Events',
+                        color: '#ffffff',
+                    },
+                    {
+                        id: '2',
+                        name: 'Training',
+                        color: '#ffffff',
+                    }
+                ]
+            })
+            cal.on({
+                'beforeCreateSchedule': function(e) {
+                    launchCustomModal(
+                        'info',
+                        'Requesting Training',
+                        `<form id="{% url 'request_training' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="start" type="datetime-local" value="${new Date(e.start.getTime()).toISOString().slice(0,-1)}" required>
+                                        <label>Range Start (Zulu)</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="end" type="datetime-local" value="${new Date(e.end.getTime()).toISOString().slice(0,-1)}" required>
+                                        <label>Range End (Zulu)</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <select name="type" required>
+                                            <option selected></option>
+                                            {% for type in types %}
+                                                <option value="{{ type.0 }}">{{ type.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Session Type</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <select name="level" required>
+                                            <option selected></option>
+                                            {% for level in levels %}
+                                                <option value="{{ level.0 }}">{{ level.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Training Level</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <textarea name="remarks" rows="3"></textarea>
+                                        <label>Remarks</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary">Submit</button>
+                        </form>`
+                    )
+                    e.guide.clearGuideElement()
+                },
+                'beforeUpdateSchedule': function(e) {
+                    e.schedule.start = e.start;
+                    e.schedule.end = e.end;
+                    cal.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
+                },
+                'beforeDeleteSchedule': function(e) {
+                    cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
+                }
+            });
+            setRange()
+            cal.createSchedules([
+                {% for event in events %}
+                    {
+                        id: '{{ event.id }}',
+                        calendarId: '1',
+                        title: '{{ event.name }}',
+                        body: '{{ event.description|escape|linebreaksbr }}',
+                        location: '{{ event.host }}',
+                        category: 'time',
+                        isReadOnly: true,
+                        bgColor: '#2d45a2',
+                        borderColor: '#091a6d',
+                        start: '{{ event.start|to_iso_format }}+00:00',
+                        end: '{{ event.end|to_iso_format }}+00:00',
+                    },
+                {% endfor %}
+                {% for session in sessions %}
+                    {
+                        id: '{{ session.id }}',
+                        calendarId: '2',
+                        title: '{{ session.student.full_name }}\'s {{ session.get_type_display }} Session',
+                        category: 'time',
+                        attendees: ['{{ session.student.full_name }}', '{{ session.instructor.full_name }}'],
+                        isReadOnly: true,
+                        bgColor: '#dd8425',
+                        borderColor: '#c6720b',
+                        start: '{{ session.start|to_iso_format }}+00:00',
+                        end: '{{ session.end|to_iso_format }}+00:00',
+                    },
+                {% endfor %}
+            ])
+        })
+        $('#calendar-menu button').click(function() {
+            switch ($(this).data('action')) {
+                case 'prev':
+                    cal.prev()
+                    break
+                case 'today':
+                    cal.today()
+                    break
+                case 'next':
+                    cal.next()
+                    break
+            }
+            setRange()
+        })
+    </script>
+{% endblock %}

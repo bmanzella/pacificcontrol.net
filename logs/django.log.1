@@ -1,0 +1,614 @@
+[2020-11-21 03:42:26,455] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 38, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'position_id': 0}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 03:42:26,455] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 38, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'position_id': 0}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 16:58:40,462] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'session_id': ''}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 16:58:40,462] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'session_id': ''}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 17:00:06,951] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'session_id': ''}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 17:00:06,951] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'session_id': ''}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 17:00:55,919] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'session_id': ''}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 17:00:55,919] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 170, in render
+    return self._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 162, in _render
+    return self.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 938, in render
+    bit = node.render_annotated(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 905, in render_annotated
+    return self.render(context)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 446, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/base.py", line 87, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 685, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'delete_session' with keyword arguments '{'session_id': ''}' not found. 1 pattern(s) tried: ['all_sessions/(?P<session_id>[0-9]+)/delete/$']
+[2020-11-21 17:01:14,338] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/engine.py", line 143, in get_template
+    template, origin = self.find_template(template_name)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/engine.py", line 125, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loaders/base.py", line 29, in get_template
+    return Template(
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 155, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 193, in compile_nodelist
+    return parser.parse()
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 478, in parse
+    raise self.error(token, e)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 476, in parse
+    compiled_result = compile_func(self, token)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 270, in do_extends
+    nodelist = parser.parse()
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 478, in parse
+    raise self.error(token, e)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 476, in parse
+    compiled_result = compile_func(self, token)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 213, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 478, in parse
+    raise self.error(token, e)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 476, in parse
+    compiled_result = compile_func(self, token)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 1387, in url
+    kwargs[name] = parser.compile_filter(value)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 563, in compile_filter
+    return FilterExpression(token, self)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 662, in __init__
+    raise TemplateSyntaxError("Could not parse the remainder: '%s' "
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '{{session.id}}' from '{{session.id}}'
+[2020-11-21 17:01:14,338] ERROR [django.request:224] Internal Server Error: /all_sessions/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 31, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/api/views.py", line 39, in all_sessions
+    return render(request, 'all_sessions.html', {
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/engine.py", line 143, in get_template
+    template, origin = self.find_template(template_name)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/engine.py", line 125, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loaders/base.py", line 29, in get_template
+    return Template(
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 155, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 193, in compile_nodelist
+    return parser.parse()
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 478, in parse
+    raise self.error(token, e)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 476, in parse
+    compiled_result = compile_func(self, token)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 270, in do_extends
+    nodelist = parser.parse()
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 478, in parse
+    raise self.error(token, e)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 476, in parse
+    compiled_result = compile_func(self, token)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 213, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 478, in parse
+    raise self.error(token, e)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 476, in parse
+    compiled_result = compile_func(self, token)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 1387, in url
+    kwargs[name] = parser.compile_filter(value)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 563, in compile_filter
+    return FilterExpression(token, self)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/template/base.py", line 662, in __init__
+    raise TemplateSyntaxError("Could not parse the remainder: '%s' "
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '{{session.id}}' from '{{session.id}}'
+[2020-11-24 00:46:52,670] ERROR [django.request:224] Internal Server Error: /training/session/261/edit/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 51, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 118, in edit_session
+    modify_session(session, request)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 48, in modify_session
+    session.start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
+ValueError: Invalid isoformat string: '2020-11-23T023:00:00'
+[2020-11-24 00:46:52,670] ERROR [django.request:224] Internal Server Error: /training/session/261/edit/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 51, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 118, in edit_session
+    modify_session(session, request)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 48, in modify_session
+    session.start = pytz.utc.localize(datetime.fromisoformat(request.POST.get('start')))
+ValueError: Invalid isoformat string: '2020-11-23T023:00:00'
+[2020-11-24 00:55:22,166] ERROR [django.request:224] Internal Server Error: /training/requests/75/reject/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/views/decorators/http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 41, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 283, in reject_training_request
+    training_request = TrainingRequest.objects.get(id=request_id)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/db/models/query.py", line 429, in get
+    raise self.model.DoesNotExist(
+apps.training.models.TrainingRequest.DoesNotExist: TrainingRequest matching query does not exist.
+[2020-11-24 00:55:22,166] ERROR [django.request:224] Internal Server Error: /training/requests/75/reject/
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/views/decorators/http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/zhuartcc/decorators.py", line 41, in inner
+    return func(request, *args, **kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 283, in reject_training_request
+    training_request = TrainingRequest.objects.get(id=request_id)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/django/db/models/query.py", line 429, in get
+    raise self.model.DoesNotExist(
+apps.training.models.TrainingRequest.DoesNotExist: TrainingRequest matching query does not exist.
+[2020-11-24 01:43:30,979] ERROR [apscheduler.executors.default:131] Job "update_roster (trigger: interval[0:30:00], next run at: 2020-11-24 02:13:20 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/var/www/pacificcontrol.net/apps/user/updater.py", line 26, in update_roster
+    del roster['testing']
+KeyError: 'testing'
+[2020-11-25 01:01:16,781] ERROR [apscheduler.executors.default:131] Job "submit_ctrs_records (trigger: cron[hour='*'], next run at: 2020-11-25 02:00:00 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/updater.py", line 26, in submit_ctrs_records
+    post_ctrs(session)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 88, in post_ctrs
+    if response.json()['status'] == 'OK':
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/requests/models.py", line 900, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[2020-11-25 01:01:16,782] ERROR [apscheduler.executors.default:131] Job "submit_ctrs_records (trigger: cron[hour='*'], next run at: 2020-11-25 02:00:00 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/updater.py", line 26, in submit_ctrs_records
+    post_ctrs(session)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 88, in post_ctrs
+    if response.json()['status'] == 'OK':
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/requests/models.py", line 900, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[2020-11-25 01:01:16,783] ERROR [apscheduler.executors.default:131] Job "submit_ctrs_records (trigger: cron[hour='*'], next run at: 2020-11-25 02:00:00 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/updater.py", line 26, in submit_ctrs_records
+    post_ctrs(session)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 88, in post_ctrs
+    if response.json()['status'] == 'OK':
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/requests/models.py", line 900, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[2020-11-25 02:00:49,213] ERROR [apscheduler.executors.default:131] Job "submit_ctrs_records (trigger: cron[hour='*'], next run at: 2020-11-25 03:00:00 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/updater.py", line 26, in submit_ctrs_records
+    post_ctrs(session)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 88, in post_ctrs
+    if response.json()['status'] == 'OK':
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/requests/models.py", line 900, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[2020-11-25 02:00:49,211] ERROR [apscheduler.executors.default:131] Job "submit_ctrs_records (trigger: cron[hour='*'], next run at: 2020-11-25 03:00:00 UTC)" raised an exception
+Traceback (most recent call last):
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/apscheduler/executors/base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "/var/www/pacificcontrol.net/apps/training/updater.py", line 26, in submit_ctrs_records
+    post_ctrs(session)
+  File "/var/www/pacificcontrol.net/apps/training/views.py", line 88, in post_ctrs
+    if response.json()['status'] == 'OK':
+  File "/var/www/pacificcontrol.net/venv/lib/python3.8/site-packages/requests/models.py", line 900, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.8/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)

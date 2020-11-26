@@ -1,0 +1,217 @@
+{% extends 'mainTemplate.html' %}
+{% load filters %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.css">
+{% endblock %}
+
+
+{% block body %}
+    <div id="calendar-menu" class="text-center">
+        <button class="btn" data-action="prev" style="font-size: 20px">
+            <i class="fas fa-angle-left"></i>
+        </button>
+        <button class="btn" data-action="today" style="font-size: 20px">Today</button>
+        <button class="btn" data-action="next" style="font-size: 20px">
+            <i class="fas fa-angle-right"></i>
+        </button>
+    </div>
+    <p class="text-center" id="calendar-range"></p>
+
+    <div id="calendar" style="height: 800px"></div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+    <script>
+        var cal = null
+        var dateOptions = {year: 'numeric', month: 'long', day: '2-digit'}
+        function setRange() {
+            $('#calendar-range').html('<b>' +
+                new Date(cal.getDateRangeStart().getTime()).toLocaleDateString("en-US", dateOptions) + ' - ' +
+                new Date(cal.getDateRangeEnd().getTime()).toLocaleDateString("en-US", dateOptions) + '</b>'
+            )
+        }
+        $(function() {
+            cal = new tui.Calendar(document.getElementById('calendar'), {
+                defaultView: 'week',
+                taskView: false,
+                useDetailPopup: true,
+                template: {
+                    popupDetailDate: function(isAllDay, start, end) {
+                        let tz = moment.tz.guess()
+                        start = moment(start.toDate()).tz(tz).utc()
+                        end = moment(end.toDate()).tz(tz).utc()
+                        let isSameDate = start.date() === end.date()
+                        if (isAllDay) {
+                            return moment(start).format('MMM DD, YYYY') + (isSameDate ? '' : ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format('MMM DD, YYYY'))
+                        } else {
+                            return moment(start).format('MMM DD, YYYY @ HHmm[z]') + ' <i class="far fa-sm fa-long-arrow-right"></i> ' + moment(end).format((isSameDate ? '' : 'MMM DD, YYYY @ ') + 'HHmm[z]')
+                        }
+                    },
+                },
+                timezones: [
+                    {
+                        timezoneOffset: -new Date().getTimezoneOffset(),
+                        displayLabel: 'Local',
+                        tooltip: 'Local'
+                    }, {
+                        timezoneOffset: 0,
+                        displayLabel: 'UTC',
+                        tooltip: 'UTC'
+                    }
+                ],
+                calendars: [
+                    {
+                        id: '1',
+                        name: 'Events',
+                        color: '#ffffff',
+                    },
+                    {
+                        id: '2',
+                        name: 'Training',
+                        color: '#ffffff',
+                    }
+                ]
+            })
+            cal.on({
+                'beforeCreateSchedule': function(e) {
+                    launchCustomModal(
+                        'info',
+                        'Creating New Event',
+                        `<form id="new-event" action="{% url 'new_event' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <input name="name" type="text" required>
+                                        <label>Event Name</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="start" type="datetime-local" value="${new Date(e.start.getTime()).toISOString().slice(0,-1)}" required>
+                                        <label>Start Time (Zulu)</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="end" type="datetime-local" value="${new Date(e.end.getTime()).toISOString().slice(0,-1)}" required>
+                                        <label>End Time (Zulu)</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <input name="banner" type="text">
+                                        <label>Banner URL</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <input name="host" type="text" required>
+                                        <label>Event Host</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="label-group">
+                                        <select name="preset">
+                                            <option selected></option>
+                                            {% for preset in position_presets %}
+                                                <option value="{{ preset.id }}">{{ preset.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Position Preset</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="label-group">
+                                        <textarea name="description" rows="3"></textarea>
+                                        <label>Event Description</label>
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="text-left col-12 mb-3 toggle">
+                                    <input name="hidden" type="checkbox">
+                                    <label>Event hidden from controllers</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary">Submit</button>
+                        </form>`
+                    )
+                    e.guide.clearGuideElement()
+                },
+                'beforeUpdateSchedule': function(e) {
+                    e.schedule.start = e.start;
+                    e.schedule.end = e.end;
+                    cal.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
+                },
+                'beforeDeleteSchedule': function(e) {
+                    cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);
+                }
+            });
+            setRange()
+            cal.createSchedules([
+                {% for event in events %}
+                    {
+                        id: '{{ event.id }}',
+                        calendarId: '1',
+                        title: '{{ event.name }}',
+                        body: '{{ event.description|escape|linebreaksbr }}',
+                        location: '{{ event.host }}',
+                        category: 'time',
+                        isReadOnly: true,
+                        bgColor: '#2d45a2',
+                        borderColor: '#091a6d',
+                        start: '{{ event.start|to_iso_format }}+00:00',
+                        end: '{{ event.end|to_iso_format }}+00:00',
+                    },
+                {% endfor %}
+                {% for session in sessions %}
+                    {
+                        id: '{{ session.id }}',
+                        calendarId: '2',
+                        title: '{{ session.student.full_name }}\'s {{ session.get_type_display }} Session',
+                        category: 'time',
+                        attendees: ['{{ session.student.full_name }}', '{{ session.instructor.full_name }}'],
+                        isReadOnly: true,
+                        bgColor: '#dd8425',
+                        borderColor: '#c6720b',
+                        start: '{{ session.start|to_iso_format }}+00:00',
+                        end: '{{ session.end|to_iso_format }}+00:00',
+                    },
+                {% endfor %}
+            ])
+        })
+        $('#calendar-menu button').click(function() {
+            switch ($(this).data('action')) {
+                case 'prev':
+                    cal.prev()
+                    break
+                case 'today':
+                    cal.today()
+                    break
+                case 'next':
+                    cal.next()
+                    break
+            }
+            setRange()
+        })
+    </script>
+{% endblock %}

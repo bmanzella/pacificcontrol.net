@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        {% include 'partials/head.html' %}
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <div class="page-wrapper">
+            {% include 'partials/navbar.html' with dark=False %}
+
+
+            <!-- START Header -->
+            <div class="page-header bg-primary position-relative">
+                <div class="title-block">
+                    <h1 class="title">{{ page_title|default:'Untitled' }}</h1>
+                </div>
+            </div>
+            <!-- END Header -->
+
+
+            <!-- START Nav Tabs -->
+            <div class="tab-container">
+                {% block tabs %}{% endblock %}
+            </div>
+            <!-- END Nav Tabs -->
+
+
+            <!-- START Page Content -->
+            <div class="page-container">
+                {% block body %}{% endblock %}
+            </div>
+            <!-- END Page Content -->
+
+
+            {% include 'partials/footer.html' %}
+        </div>
+        {% include 'partials/scripts.html' %}
+        {% block scripts %}{% endblock %}
+    </body>
+</html>

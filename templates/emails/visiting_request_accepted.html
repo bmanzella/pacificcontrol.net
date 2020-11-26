@@ -1,0 +1,23 @@
+{% extends 'email_template.html' %}
+
+{% block content %}
+    <p>Hello {{ name }},</p>
+    <p>Congratulations! Your visiting request to visit the Pacific Control Facility was approved by a senior staff member! We are happy to welcome you to our family and hope you enjoy your time here.</p>
+    <br>
+    <h3>Connecting to the PCF Discord</h3>
+    <p>Discord is PCF's primary method of voice communications. You are required to be in the Discord server while controlling.</p>
+    <br>
+    <p>To join our server, download and install Discord by visiting <a href="https://discord.com" target="_blank">discord.com</a>. Once you're logged in, visit <a href="https://discord.gg/A7vakrp">this link</a>, which will automatically open Discord and prompt you to join the server.</p>
+    <br>
+    <h3>Setting up VATSIM Sync</h3>
+    <p>VATSIM Sync is used across Discord to sync permissions and roles with rating changes. It is recommended that you set it up with both services. More instructions can be found at <a href="https://vatsimsync.com">vatsimsync.com</a>.</p>
+    <br>
+    <h3>PCF Web Services</h3>
+    <p>The main website, found at <a href="https://pacificcontrol.net">pacificcontrol.net</a>, is a central tool used for scheduling training, signing up for events, and downloading and viewing important documents. Your account should be automatically activated but if you are experiencing any issues reach out to <a href="mailto:wm@pacificcontrol.net">wm@pacificcontrol.net</a> or <a href="mailto:atm@pacificcontrol.net">atm@pacificcontrol.net</a>.</p>
+    <br>
+    <h3>Training</h3>
+    <p>To schedule a training session, log in to the main website and go to the Training Center, which can be found by clicking on your name in the top right. Here you will see all training sessions, previous and scheduled, and will also be able to manage training requests. Once you submit a training request, a member of the training team will accept your request and a session will be automatically scheduled.</p>
+    <p>If you have any questions regarding the training process or if you have any trouble scheduling training, please contact the Training Administrator at <a href="mailto:ta@pacificcontrol.net">ta@pacificcontrol.net</a>.</p>
+    <br>
+    <p>Again, on behalf of the entire staff team at PCF, welcome to our family!</p>
+{% endblock %}

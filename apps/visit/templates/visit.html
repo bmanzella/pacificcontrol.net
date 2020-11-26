@@ -1,0 +1,90 @@
+{% extends 'mainTemplate.html' %}
+
+{% block body %}
+<form action="{% url 'visit' %}" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-12 col-xl-5 d-flex align-items-stretch">
+            <div class="card card-nav-tabs">
+                <div class="card-header">User Details</div>
+                <div class="card-body">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <input name="cid" type="text" value="{{ request.session.vatsim_data.cid }}" readonly>
+                                    <label>CID</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <input name="rating" type="text" value="{{ request.session.vatsim_data.rating }}" readonly>
+                                    <label>Rating</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="label-group">
+                                    <input name="home_facility" type="text" required>
+                                    <label>Home Facility</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="first_name" type="text" value="{{ request.session.vatsim_data.firstname }}" required>
+                                    <label>First</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="label-group">
+                                    <input name="last_name" type="text" value="{{ request.session.vatsim_data.lastname }}" required>
+                                    <label>Last Name</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <input name="email" type="text" value="{{ request.session.vatsim_data.email }}" required>
+                                    <label>Email</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-7 d-flex align-items-stretch">
+            <div class="card card-nav-tabs">
+                <div class="card-header">Additional Details</div>
+                <div class="card-body">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="label-group">
+                                    <textarea name="reason" rows="4" required></textarea>
+                                    <label>Why would you like to visit the Pacific Control Facility?</label>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 toggle mb-0">
+                                <input type="checkbox" required>
+                                <label>I agree to receive notification emails from Pacific Control Facility.</label>
+                            </div>
+                            <div class="col-12 toggle">
+                                <input type="checkbox" required>
+                                <label>I have read and agree to the <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a>.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'home' %}"><button class="btn btn-secondary" type="button">Cancel</button></a>
+    <button type="submit" class="btn btn-primary">Submit Application</button>
+</form>
+{% endblock %}

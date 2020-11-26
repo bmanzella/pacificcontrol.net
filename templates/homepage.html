@@ -1,0 +1,228 @@
+{% load static %}
+{% load filters %}
+
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>Welcome to Pacific Control Facility!</title>
+        {% include 'partials/head.html' %}
+    </head>
+    <body>
+        <div class="home-wrapper">
+            {% include 'partials/navbar.html' with dark=False %}
+
+
+            <!-- START Page Content -->
+            <div class="home-title-block">
+                <h1 class="home-title">Welcome to<br>PCF</h1>
+                <h2 class="home-subtitle">From arctic mountains to tropical islands, we've got it all!</h2>
+                <p class="scroll-arrow"><i class="far fa-sm fa-arrow-left"></i>&nbsp; Scroll</p>
+            </div>
+            <div class="page-container">
+                <div class="row">
+                    <div class="col-12 col-lg-8 mt-4 mt-md-2">
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body bg-gold">
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy-alt"></i> First Place</h2>
+                                        <div class="card-footer">
+                                            <h3>{{ top_controllers.0.user.full_name }}</h3>
+                                            <h5 class="mb-0">{{ top_controllers.0.hours|duration }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body bg-silver">
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Second Place</h2>
+                                        <div class="card-footer">
+                                            <h3>{{ top_controllers.1.user.full_name }}</h3>
+                                            <h5 class="mb-0">{{ top_controllers.1.hours|duration }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="card text-center">
+                                    <div class="card-body bg-bronze">
+                                        <h2 class="mb-3" style="font-size: 20px;"><i class="far fa-trophy"></i> Third Place</h2>
+                                        <div class="card-footer">
+                                            <h3>{{ top_controllers.2.user.full_name }}</h3>
+                                            <h5 class="mb-0">{{ top_controllers.2.hours|duration }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><i class="far fa-newspaper"></i> Recent Announcements</div>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    {% for announcement in announcements %}
+                                        <li>
+                                            <button class="btn btn-link mb-0" data-action="announcement" data-subject="{{ announcement.subject }}" data-message="{{ announcement.message }}">
+                                                <h5><span class="badge badge-primary">{{ announcement.created|date:'M. j Y' }}</span> {{ announcement.subject }} <small><span class="text-black-50">by {{ announcement.author.full_name }}</span></small></h5>
+                                            </button>
+                                        </li>
+                                    {% empty %}
+                                        <li>No announcements were found...</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><i class="far fa-calendar"></i> Events</div>
+                            <div class="card-body">
+                                {% for event in events %}
+                                    <a href="{% url 'event' event_id=event.id %}"><img src="{% if event.banner %}{{ event.banner }}{% else %}{% static 'img/banner-placeholder.png' %}{% endif %}" width="100%"></a>
+                                {% empty %}
+                                    No events were found...
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 mt-4 mt-md-2">
+                        <a href="https://discord.gg/A7vakrp">
+                            <div class="text-center text-white p-4" style="background-color: #7289DA; margin-bottom: 30px;">
+                                <h3 class="mb-0"><i class="fab fa-discord"></i> Discord</h3>
+                            </div>
+                        </a>
+                        <div class="card">
+                            <div class="card-header"><i class="far fa-user"></i> Online Controllers</div>
+                            <div class="card-body">
+                                <table class="table text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Callsign</th>
+                                            <th>Controller</th>
+                                            <th>Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for controller in online %}
+                                            <tr>
+                                                <td class="py-2">{{ controller.callsign }}</td>
+                                                <td class="py-2">{{ controller.user.full_name }}</td>
+                                                <td class="py-2">{{ controller.duration|duration }}</td>
+                                            </tr>
+                                        {% empty %}
+                                            <tr>
+                                                <td class="py-2" colspan="3">No controllers online.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><i class="far fa-plane"></i> Pilots within PCF airspace</div>
+                            <div class="card-body">
+                                <div class="text-center" id="pilots-loader">
+                                    <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
+                                </div>
+                                <table class="table text-center" id="pilots">
+                                    <thead>
+                                        <tr>
+                                            <th>Callsign</th>
+                                            <th>Departure</th>
+                                            <th>Arrival</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="flights">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><i class="far fa-cloud-sun"></i> Weather</div>
+                            <div class="card-body">
+                                <div class="text-center" id="weather-loader">
+                                    <img src="{% static 'img/preloader.gif' %}" style="width: 100px;">
+                                </div>
+                                <table class="table text-center" id="weather">
+                                    <thead>
+                                        <tr>
+                                            <th>Station</th>
+                                            <th>Condition</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="metars">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END Page Content -->
+
+
+            {% include 'partials/footer.html' %}
+        </div>
+        {% include 'partials/scripts.html' %}
+        <script>
+            $('#weather, #pilots').hide()
+            $('[data-action="announcement"]').click(function() {
+                launchCustomModal(
+                    'news',
+                    $(this).data('subject'),
+                    $(this).data('message'),
+                    false,
+                    true
+                )
+            })
+            $(function() {
+                let airports = ['PHNL', 'PANC', 'PHOG', 'PAJN', 'PGUM', 'PHTO', 'PAFA']
+                for (let airport of airports) {
+                    $.get('https://cors-anywhere.herokuapp.com/' +
+                            'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3&mostRecent=true&stationString=' + airport
+                    )
+                    .done(function(data) {
+                        let metar_list = data.getElementsByTagName('data')[0].children
+                        for (let metar of metar_list) {
+                            let id = metar.getElementsByTagName('station_id')[0].textContent
+                            let raw = metar.getElementsByTagName('raw_text')[0].textContent
+                            let category = metar.getElementsByTagName('flight_category')[0]?.textContent
+                            $('#metars').append(
+                                `<tr>
+                                    <td class="py-2">${id}</td>
+                                    <td class="py-2" id="${id}" data-toggle="popover" data-placement="top" data-content="${raw}">
+                                        <span class="badge badge-${(category === 'VFR' ? 'success' : category === 'MVFR' ? 'info' : category === 'IFR' ? 'warning' : category === 'LIFR' ? 'danger' : 'muted')}">${category ? category : 'N/A'}</span>
+                                    </td>
+                                </tr>`
+                            )
+                            $('#' + id).popover().hover(function() { $(this).popover('show') }, function() { $(this).popover('hide') })
+                        }
+                    })
+                }
+                $('#weather-loader').fadeOut('fast', function() {
+                    $(this).remove()
+                    $('#weather').fadeIn('fast')
+                })
+                $.get('https://cors-anywhere.herokuapp.com/https://api.denartcc.org/live/PCF')
+                .done(function(data) {
+                    let flights = JSON.parse(data)
+                    if (flights.length > 0) {
+                        flights.forEach(function (flight) {
+                            $('#flights').append(
+                                `<tr>
+                                    <td class="py-2">${flight.callsign}</td>
+                                    <td class="py-2">${flight.dep ? flight.dep : '<span class="text-muted">N/A</span>'}</td>
+                                    <td class="py-2">${flight.arr ? flight.arr : '<span class="text-muted">N/A</span>'}</td>
+                                </tr>)`
+                            )
+                        })
+                    } else {
+                        $('#flights').append('<tr><td class="py-2" colspan="3">No pilots in PCF.</td></tr>')
+                    }
+                    $('#pilots-loader').fadeOut('fast', function() {
+                        $(this).remove()
+                        $('#pilots').fadeIn('fast')
+                    })
+                })
+            })
+        </script>
+    </body>
+</html>
