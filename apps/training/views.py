@@ -52,7 +52,7 @@ def modify_session(session, request):
     session.position = request.POST.get('position')
     session.type = request.POST.get('type')
     session.level = request.POST.get('level')
-    session.status = 1
+    session.status = request.POST.get('status')
     session.ots_status = request.POST.get('ots_status')
     session.notes = request.POST.get('notes')
     session.solo_granted = request.POST.get('solo_grated', False)
