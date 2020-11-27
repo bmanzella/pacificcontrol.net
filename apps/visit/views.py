@@ -1,5 +1,7 @@
 import os
 
+import requests
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -95,11 +97,20 @@ def accept_visiting_request(request, visit_id):
             edit_user.rating = visiting_request.rating
             edit_user.main_role = 'VC'
             edit_user.assign_initial_cert()
+            requests.post(
+                f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/manageVisitor/{visiting_request.cid}',
+                params={'apikey': os.getenv('API_KEY')}
+            )
             edit_user.save()
         else:
             return HttpResponse('Visitor is already on the roster.', status=400)
     else:
         visiting_request.add_to_roster()
+        requests.post(
+            f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/manageVisitor/{visiting_request.cid}',
+            params={'apikey': os.getenv('API_KEY')}
+        )
+
 
     ActionLog(action=f'{visiting_request}\'s visiting request was accepted by {request.user_obj}.').save()
 
