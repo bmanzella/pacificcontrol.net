@@ -995,7 +995,17 @@ dP     dP `88888P8 8888P'   dP `8888P88 `88888P8   dP   dP `88888P' dP    dP
     font-weight: 200;
     cursor: pointer;
 }
+
 .mobile-nav-list-item {
+    position: relative;
+    display: inline-block;
+    transition-delay: 0.8s;
+    opacity: 0;
+    transform: translate(0%, 100%);
+    transition: opacity .2s ease, transform .3s ease;
+    margin-right: 25px;
+}
+.mobile-nav-list-sub-item {
     position: relative;
     display: inline-block;
     transition-delay: 0.8s;
