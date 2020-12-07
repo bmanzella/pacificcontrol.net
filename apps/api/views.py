@@ -1,4 +1,5 @@
 import calendar
+import os
 from datetime import timedelta
 
 from django.http import HttpResponse
@@ -83,7 +84,6 @@ def return_inactive_users():
             inactive_users.append(user_status)
 
     return inactive_users
-
 
 def return_sorted_hours():
     aggregates = []
