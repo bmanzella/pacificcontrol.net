@@ -221,6 +221,8 @@ def remove_users(request):
             user = User.objects.get(id=id)
             if user.main_role == 'HC':
                 requests.delete(f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/{user.cid}')
+            if user.main_role == 'VC':
+                requests.delete(f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/manageVisitor/{user.cid}')
             user.status = 2
             user.save()
             send_mail(
@@ -231,7 +233,7 @@ def remove_users(request):
                 fail_silently=True,
             )
 
-            ActionLog(action=f'User {user.full_name} removed from the ARTCC {request.user_obj}.').save()
+            ActionLog(action=f'User {user.full_name} removed from the ARTCC by {request.user_obj}.').save()
 
     return HttpResponse(status=200)
 

@@ -16,14 +16,18 @@ def start():
     scheduler.add_job(update_loa, 'cron', hour=0)
     scheduler.start()
 
-
 # Pulls the roster from VATUSA API and adds new members to local database. Updates emails and ratings of existing users
 def update_roster():
     roster = requests.get(
         f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster',
         params={'apikey': os.getenv('API_KEY')},
     ).json()
+    vis_roster = requests.get(
+        f'https://api.vatusa.net/v2/facility/{os.getenv("ARTCC_ICAO")}/roster/visit',
+        params={'apikey': os.getenv('API_KEY')},
+    ).json()
     del roster['testing']
+    del vis_roster['testing']
 
     for user in roster:
         user_details = roster[user]
@@ -43,10 +47,6 @@ def update_roster():
         else:
             edit_user = User.objects.get(cid=user_details['cid'])
             edit_user.rating = user_details['rating_short']
-
-#        except KeyError:
-#            log = open('api_log.txt', 'w+')
-#            log.write(json.dumps(user_details) + '\n')
 
             # If user is rejoining the ARTCC after being marked inactive
             if edit_user.status == 2:
@@ -68,6 +68,14 @@ def update_roster():
             user.save()
             ActionLog(action=f'User {user.full_name} was set as inactive by system.').save()
 
+    # Removes visitors if they are no longer on the VATUSA roster
+    vis_cids = [vis_roster[user]['cid'] for user in vis_roster]
+    for user in User.objects.filter(main_role='VC').exclude(status=2):
+        if user.cid not in vis_cids:
+            user.status = 2
+            user.save()
+            ActionLog(action=f'Visitor {user.full_name} was removed from the VATUSA roster.').save()
+
     # Cycles through visiting controllers separately since they are not on main roster
     for edit_user in User.objects.filter(main_role='VC'):
         user_details = requests.get(
@@ -80,7 +88,6 @@ def update_roster():
 
         edit_user.rating = user_details['rating_short']
         edit_user.save()
-
 
 def update_loa():
     for user in User.objects.filter(status=1):
