@@ -6,6 +6,7 @@
     <head>
         <title>Welcome to Pacific Control Facility!</title>
         {% include 'partials/head.html' %}
+        <link rel="stylesheet" href="{% static 'css/snow.css' %}">
     </head>
     <body>
         <div class="home-wrapper">
@@ -13,6 +14,11 @@
 
 
             <!-- START Page Content -->
+            <div class="snow-div">
+                {% for i in 150|as_range %}
+                    <div class="snow"></div>
+                {% endfor %}
+            </div>
             <div class="home-title-block">
                 <h1 class="home-title">Welcome to<br>PCF</h1>
                 <h2 class="home-subtitle">From arctic mountains to tropical islands, we've got it all!</h2>
