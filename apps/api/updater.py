@@ -23,7 +23,12 @@ def start():
 
 def pull_controllers():
     airports = ast.literal_eval(os.getenv('AIRPORT_IATA'))
-    data = requests.get('https://data.vatsim.net/v3/vatsim-data.json').json()
+    req = requests.get('https://data.vatsim.net/v3/vatsim-data.json').json()
+
+    if req.status_code == 200:
+        data = req.json()
+    else:
+        return
 
     for controller in Controller.objects.all():
         if next((entry for entry in data.get('controllers') if entry.get('callsign') == controller.callsign), None):
@@ -33,19 +38,18 @@ def pull_controllers():
             controller.convert_to_session()
             controller.delete()
 
-    for controller in data.get('controllers'):
-        user = User.objects.filter(cid=controller.get('cid')).first()
-        if user:
-            if controller.get('callsign').split('_')[0] in airports:
-                if 0 < controller.get('facility') < 7:
-                    if not Controller.objects.filter(callsign=controller.get('callsign')).exists():
-                        Controller(
-                            user=user,
-                            callsign=controller.get('callsign'),
-                            frequency=controller.get('frequency'),
-                            online_since=pytz.utc.localize(datetime.strptime(controller.get('logon_time'), '%Y-%m-%dT%H:%M:%S%fZ')),
-                            last_update=timezone.now(),
-                        ).save()
+        for controller in data.get('controllers'):
+            user = User.objects.filter(cid=controller.get('cid'))
+            if user.exists():
+                if controller.get('facility') != 0:
+                    if controller.get('callsign').split('_')[0] in airports:
+                        if not Controller.objects.filter(callsign=controller.get('callsign')).exists():
+                            Controller(
+                                user=user.first(),
+                                callsign=controller.get('callsign'),
+                                online_since=pytz.utc.localize(datetime.strptime(controller.get('logon_time')[:-2], '%Y-%m-%dT%H:%M:%S.%f')),
+                                last_update=timezone.now(),
+                            ).save()
 
 
 def warn_inactive_users():

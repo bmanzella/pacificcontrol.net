@@ -49,6 +49,11 @@ def login(request):
                     new_user.assign_initial_cert()
 
                     ActionLog(action=f'User {new_user.full_name} was created by system.').save()
+            elif User.objects.filter(cid=data['cid']).exists():
+                user = User.objects.get(cid=data['cid'])
+                user.email = data['email']
+                user.rating = data['rating']
+                user.save()
         else:
             return HttpResponse('Something was wrong with the token we got from VATUSA!', status=500)
 
